@@ -1,0 +1,19 @@
+# Virtual environment
+.venv/
+
+## PyCharm project files
+#.idea/
+
+## Django database
+#db.sqlite3
+
+## Static and media files
+#static/
+#mediafiles/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django secret key and config files
+.env
