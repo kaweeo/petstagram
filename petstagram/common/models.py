@@ -1,5 +1,4 @@
 from django.db import models
-
 from petstagram.photos.models import Photo
 
 

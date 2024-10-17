@@ -37,14 +37,15 @@
         <div class="actionBtns">
             <div class="left">
                     <span class="heart">
-                        <a href="#">
-                            <!-- if user has liked the photo -->
-                            <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
-                            <!-- else -->
-                            <i class="fa-regular fa-heart"></i>
+                        <a href="{% url 'like' photo.pk %}">
+                             {% if photo.like_set.all %}
+                                 <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
+                             {% else %}
+                                 <i class="fa-regular fa-heart"></i>
+                             {% endif %}
                         </a>
                     </span>
-                <a href="share">
+                <a href="{% url 'share' photo.pk %}">
                     <i class="fa-solid fa-share"></i>
                 </a>
             </div>
@@ -52,17 +53,17 @@
         <!-- -->
 
         <a href="#">
-            <p class="likes">203 likes</p>
+            <p class="likes">{{ photo.like_set.count }}</p>
         </a>
 
         {% for pet in photo.tagged_pets.all %}
-             <!-- Link to First Tagged Pet Details Page-->
-             <a href="{% url 'pet-details' "username" pet.slug %}">
-                 <p class="message">
+            <!-- Link to First Tagged Pet Details Page-->
+            <a href="{% url 'pet-details' "username" pet.slug %}">
+                <p class="message">
                     <b>{{ pet.name }}</b>
-                 </p>
-             </a>
-         {% endfor %}
+                </p>
+            </a>
+        {% endfor %}
 
         <a href="{% url 'photo-details' photo.pk %}">
             <h4 class="details">See details</h4>
