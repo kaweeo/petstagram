@@ -14,20 +14,21 @@
             <h3>
                 <a href="profile details">
                     <!-- if user has first name and last name -->
-                    Diyan Kalaydzhiev
+                    Donkey Hott
                     <!-- else -->
                     <!-- user username -->
                 </a>
                 <br>
-                <!-- if the photo has location -->
-                <span>Bansko, Bulgaria</span>
+                {% if photo.location %}
+                    <span>{{ photo.location }}</span>
+                {% endif %}
             </h3>
         </div>
         <!--  -->
     </div>
     <!-- Post image -->
-    <div class="imgBx" id="place the id of the photo here">
-        <img src="/static/images/axolotl.jpeg" alt="post" class="cover">
+    <div class="imgBx" id="{{ photo.pk }}">
+        <img src="{{ photo.photo.url }}" alt="post" class="cover">
     </div>
     <!-- -->
 
@@ -54,24 +55,20 @@
             <p class="likes">203 likes</p>
         </a>
 
-        <!-- tagged pets -->
-        <a href="pet profile">
-            <p class="message">
-                <b>Sasho</b>
-            </p>
-        </a>
-        <a href="pet profile">
-            <p class="message">
-                <b>Some other fish</b>
-            </p>
-        </a>
-        <!--  -->
+        {% for pet in photo.tagged_pets.all %}
+             <!-- Link to First Tagged Pet Details Page-->
+             <a href="{% url 'pet-details' "username" pet.slug %}">
+                 <p class="message">
+                    <b>{{ pet.name }}</b>
+                 </p>
+             </a>
+         {% endfor %}
 
-        <a href="post details">
+        <a href="{% url 'photo-details' photo.pk %}">
             <h4 class="details">See details</h4>
         </a>
 
-        <h5 class="postTime">19/09/2022</h5>
+        <h5 class="postTime">{{ photo.date_of_publication }}</h5>
 
         <!-- add comments section -->
         <div class="addComments">

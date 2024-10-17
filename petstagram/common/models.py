@@ -23,3 +23,4 @@ class Like(models.Model):
         to=Photo,
         on_delete=models.CASCADE,
     )
+
