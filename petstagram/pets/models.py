@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.text import slugify
 
 
-# Create your models here.
 class Pet(models.Model):
     name = models.CharField(
         max_length=30,

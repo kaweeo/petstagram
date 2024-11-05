@@ -1,11 +1,12 @@
-from petstagram.common.models import Comment
 from django import forms
+from petstagram.common.models import Comment
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ["text"]
+
         widgets = {
             'text': forms.Textarea(attrs={'placeholder': 'Add comment...'}),
         }
@@ -13,6 +14,7 @@ class CommentForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     pet_name = forms.CharField(
+        required=False,
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Search by pet name...',

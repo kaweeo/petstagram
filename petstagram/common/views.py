@@ -1,31 +1,60 @@
 from django.shortcuts import render, redirect, resolve_url
+from django.views.generic import ListView
 
 from petstagram.common.forms import CommentForm, SearchForm
 from petstagram.common.models import Like, Photo
 from pyperclip import copy
 
-def home_page(request):
-    all_photos = Photo.objects.all()
-    comment_form = CommentForm()
-    search_form = SearchForm(request.GET)
 
-    if search_form.is_valid():
-        all_photos = all_photos.filter(
-            tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
-        )
+class HomePage(ListView):
+    model = Photo
+    template_name = 'common/home-page.html'
+    context_object_name = 'all_photos'  # by default is object_list and photos
+    paginate_by = 1
 
-    context = {
-        'all_photos': all_photos,
-        'comment_form': comment_form,
-        'search_form': search_form,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    return render(request, 'common/home-page.html', context)
+        context['comment_form'] = CommentForm()
+        context['search_form'] = SearchForm(self.request.GET)
+
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()  # All objects
+        pet_name = self.request.GET.get('pet_name')
+
+        if pet_name:
+            queryset = queryset.filter(  # Filter the objects
+                tagged_pets__name__icontains=pet_name
+            )
+
+        return queryset  # Return the new queryset
+
+
+# def home_page(request):
+#     all_photos = Photo.objects.all()
+#     comment_form = CommentForm()
+#     search_form = SearchForm(request.GET)
+#
+#     if search_form.is_valid():
+#         all_photos = all_photos.filter(
+#             tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
+#         )
+#
+#     context = {
+#         'all_photos': all_photos,
+#         'comment_form': comment_form,
+#         'search_form': search_form,
+#     }
+#
+#     return render(request, 'common/home-page.html', context)
 
 
 def like_functionality(request, photo_id: int):
     liked_object = Like.objects.filter(
-        to_photo_id = photo_id,  # to_photo_id is an automatic field Django provides to reference the underlying primary key (ID) of the Photo object
+        to_photo_id=photo_id,
+        # to_photo_id is an automatic field Django provides to reference the underlying primary key (ID) of the Photo object
     ).first()
 
     if liked_object:
