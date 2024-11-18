@@ -7,8 +7,10 @@ UserModel = get_user_model()  # Return the User model that is active in this pro
 class AppUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):  # Set model = UserModel, override to be the active user we work with
         model = UserModel
+        fields = ('email', )
 
 
 class AppUserChangeForm(UserChangeForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta(UserChangeForm.Meta):
         model = UserModel
+

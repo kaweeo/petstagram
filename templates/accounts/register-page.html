@@ -1,4 +1,5 @@
-{%  extends 'common/base.html'  %}   
+{% extends 'common/base.html' %}
+{% load placeholder_filter %}
 
 {% block content %}
     <!-- Start Register Section -->
@@ -7,14 +8,16 @@
             <h1>Petstagram</h1>
 
             <!-- Start Register Form -->
-            <form action="">
-                <input type="text" placeholder="Username">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.email|placeholder:'Email' }}
+                {{ form.email.errors }}
 
-                <input type="email" placeholder="Email">
+                {{ form.password1|placeholder:'Password' }}
+                {{ form.password1.errors }}
 
-                <input type="password" placeholder="Password">
-
-                <input type="password" placeholder="Repeat Password">
+                {{ form.password2|placeholder:'Confirm Password' }}
+                {{ form.password2.errors }}
 
                 <!-- Register Button -->
                 <button type="submit">Register</button>
