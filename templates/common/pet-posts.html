@@ -20,7 +20,7 @@
                 </div>
             </a>
             <h3>
-                <a href="profile details">
+                <a href="{% url 'profile-details' photo.user.pk %}">
                     <!-- if user has first name and last name -->
                     {{ photo.user.profile.get_full_name }}
                     <!-- else -->
