@@ -60,7 +60,7 @@ def like_functionality(request, photo_id: int):
     if liked_object:
         liked_object.delete()
     else:
-        like = Like(to_photo_id=photo_id)
+        like = Like(to_photo_id=photo_id, user=request.user)
         like.save()
 
     return redirect(request.META.get('HTTP_REFERER') + f'#{photo_id}')  # Redirects to fragment location on the page
@@ -80,6 +80,7 @@ def comment_functionality(request, photo_id: int):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.to_photo = photo
+            comment.user = request.user
             comment.save()
 
         return redirect(request.META.get('HTTP_REFERER') + f'#{photo_id}')
