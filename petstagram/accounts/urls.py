@@ -1,6 +1,5 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path, include
-
 from petstagram.accounts import views
 
 urlpatterns = [
@@ -9,7 +8,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/<int:pk>/', include([
         path('', views.profile_details, name='profile-details'),
-        path('edit/', views.profile_edit, name='profile-edit'),
+        path('edit/', views.ProfileEditView.as_view(), name='profile-edit'),
         path('delete/', views.profile_delete, name='profile-delete'),
     ]))
 ]

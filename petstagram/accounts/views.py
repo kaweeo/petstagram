@@ -4,9 +4,10 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
-from petstagram.accounts.forms import AppUserCreationForm
+from petstagram.accounts.forms import AppUserCreationForm, ProfileEditForm
+from petstagram.accounts.models import Profile
 
 UserModel = get_user_model()
 
@@ -43,5 +44,18 @@ def profile_details(request, pk: int):
     return render(request, 'accounts/profile-details-page.html')
 
 
-def profile_edit(request, pk: int):
-    return render(request, 'accounts/profile-edit-page.html')
+# def profile_edit(request, pk: int):
+#     return render(request, 'accounts/profile-edit-page.html')
+
+class ProfileEditView(UpdateView):
+    model = Profile
+    form_class = ProfileEditForm
+    template_name = 'accounts/profile-edit-page.html'
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'profile-details',
+            kwargs={
+                'pk': self.object.pk
+            }
+        )
