@@ -7,16 +7,22 @@
             <a href="profile details">
                 <div class="profilepic">
                     <div class="profile_img">
-                        <div class="image">
-                            <img src="/static/images/person.png" alt="img8">
-                        </div>
+                        {% if photo.user.profile.profile_picture %}    
+                            <div class="image">
+                                <img src="{{ photo.user.profile.profile_picture }}" alt="img8">
+                            </div>
+                        {% else %}
+                            <div class="image">
+                                <img src="{% static 'images/person.png' %}" alt="img8">
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </a>
             <h3>
                 <a href="profile details">
                     <!-- if user has first name and last name -->
-                    Donkey Hott
+                    {{ photo.user.profile.get_full_name }}
                     <!-- else -->
                     <!-- user username -->
                 </a>
@@ -25,7 +31,7 @@
                     <span>{{ photo.location }}</span>
                 {% endif %}
             
-                {% if photo_page %}
+                {% if photo_page and request.user.pk == photo.user.pk %}
                 <div class="edit-delete-btns">
     
                     <!-- Link to Edit Pet Photo Page -->
@@ -77,7 +83,7 @@
 
         {% for pet in photo.tagged_pets.all %}
             <!-- Link to First Tagged Pet Details Page-->
-            <a href="{% url 'pet-details' "username" pet.slug %}">
+            <a href="{% url 'pet-details' photo.user.profile.get_full_name pet.slug %}">
                 <p class="message">
                     <b>{{ pet.name }}</b>
                 </p>
