@@ -4,7 +4,7 @@
     <div class="top">
         <!-- User Details and image location -->
         <div class="userDetails">
-            <a href="profile details">
+            <a href="{%  url 'profile-details' photo.user.pk %}">
                 <div class="profilepic">
                     <div class="profile_img">
                         {% if photo.user.profile.profile_picture %}    
@@ -63,7 +63,7 @@
             <div class="left">
                     <span class="heart">
                         <a href="{% url 'like' photo.pk %}">
-                             {% if photo.like_set.all %}
+                             {% if photo.has_liked %}
                                  <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
                              {% else %}
                                  <i class="fa-regular fa-heart"></i>

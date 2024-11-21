@@ -19,6 +19,11 @@ class HomePage(ListView):
         context['comment_form'] = CommentForm()
         context['search_form'] = SearchForm(self.request.GET)
 
+        user = self.request.user
+
+        for photo in context['all_photos']:
+            photo.has_liked = photo.like_set.filter(user=user).exists() if user.is_authenticated else False
+
         return context
 
     def get_queryset(self):
@@ -56,6 +61,7 @@ def like_functionality(request, photo_id: int):
     liked_object = Like.objects.filter(
         to_photo_id=photo_id,
         # to_photo_id is an automatic field Django provides to reference the underlying primary key (ID) of the Photo object
+        user=request.user
     ).first()
 
     if liked_object:
