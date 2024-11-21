@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView
 
@@ -35,10 +35,14 @@ class PhotoAddPage(LoginRequiredMixin, CreateView):
 #
 #     return render(request, 'photos/photo-add-page.html', context)
 
-class PhotoEditPage(LoginRequiredMixin, UpdateView):
+class PhotoEditPage(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Photo
     form_class = PhotoEditForm
     template_name = 'photos/photo-edit-page.html'
+
+    def test_func(self):
+        photo = get_object_or_404(Photo, pk=self.kwargs['pk'])
+        return self.request.user == photo.user
 
     # success_url = reverse_lazy('home') # Can not be static, because we are using the pk from the request
     def get_success_url(self):
@@ -64,7 +68,11 @@ class PhotoEditPage(LoginRequiredMixin, UpdateView):
 
 @login_required
 def photo_delete_page(request, pk: int):
-    Photo.objects.get(pk=pk).delete()
+    photo = Photo.objects.get(pk=pk)
+
+    if request.user == photo.user:
+        photo.delete()
+
     return redirect('home')
 
 

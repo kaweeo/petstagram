@@ -111,14 +111,18 @@
                                 <div class="profile_img">
                                     <div class="image">
                                         <!-- User Profile Image -->
+                                        {% if comment.user.profile.profile_picture %}
+                                        <img src="{{ comment.user.profile.profile_picture }}" alt="img8"></img>
+                                        {% else %}
                                         <img src="{% static 'images/person.png' %}" alt="img8">
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                             <p>
                                 <!-- Link to User Profile Details Page-->
                                 <!-- User First and/or Last Name or username-->
-                                <a href="">Kalin Krumov</a>
+                                <a href="{% url 'profile-details' comment.user.pk %}">{{ comment.user.profile.get_full_name }}</a>
                                 <!-- User Comment -->
                                 {{ comment.text }}
                             </p>

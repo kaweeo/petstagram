@@ -1,10 +1,10 @@
 from http.client import responses
 
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 
@@ -41,10 +41,14 @@ class AppUserRegisterView(CreateView):
 # def profile_delete(request, pk: int):
 #     return render(request, 'accounts/profile-delete-page.html')
 
-class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Profile
     template_name = reverse_lazy('accounts/profile-delete-page.html')
     success_url = reverse_lazy('login')
+
+    def test_func(self):
+        profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
+        return self.request.user == profile.user
 
 
 # def profile_details(request, pk: int):
@@ -70,10 +74,14 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 # def profile_edit(request, pk: int):
 #     return render(request, 'accounts/profile-edit-page.html')
 
-class ProfileEditView(LoginRequiredMixin, UpdateView):
+class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Profile
     form_class = ProfileEditForm
     template_name = 'accounts/profile-edit-page.html'
+
+    def test_func(self):
+        profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
+        return self.request.user == profile.user
 
     def get_success_url(self):
         return reverse_lazy(
