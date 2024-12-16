@@ -1,6 +1,6 @@
-#### A Django project to practice and implement concepts from Django Basics and Django Advanced SoftUni courses 
+## A Django project to practice and implement concepts from Django Basics and Django Advanced SoftUni courses 
 
-# The project itself is like an Instagram for pets, with functionalities and relations 
+#### The project itself is like an Instagram for pets, with functionalities and relations 
 
 * HTTP
 * Structure
